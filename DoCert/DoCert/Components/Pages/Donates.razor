@@ -1,0 +1,43 @@
+﻿@rendermode InteractiveServer
+@page "/donates"
+@using DoCert.Model
+@using DoCert.Services
+
+@inject IDataService DataService;
+
+<PageTitle>Dary</PageTitle>
+
+<h3>Dary</h3>
+
+<HxGrid TItem="Donate" DataProvider="GetGridData" 
+        TableContainerCssClass="virtualized-table-container"
+        ContentNavigationMode="GridContentNavigationMode.InfiniteScroll"
+        ItemRowHeight="41"
+        TableHeaderCssClass="sticky-top"
+        PlaceholdersRowCount="9"
+        PageSize="5"
+        Responsive="true">
+	<Columns>
+		<HxGridColumn HeaderText="Datum" ItemTextSelector="@(donate => donate.Date.ToString())" ItemCssClass="text-end" HeaderCssClass="text-end" />
+		<HxGridColumn HeaderText="Dárce" ItemTextSelector="@(donate => donate.Donor?.Name)" />
+		<HxGridColumn HeaderText="Částka" ItemTextSelector="@(donate => donate.Amount.ToString("c0"))" ItemCssClass="text-end" HeaderCssClass="text-end" />
+		<HxGridColumn HeaderText="Účet" ItemTextSelector="@(donate => donate.BankAccount?.AccountNumber)" />
+		<HxGridColumn HeaderText="VS" ItemTextSelector="@(donate => donate.VariableSymbol)" />
+		<HxGridColumn HeaderText="SS" ItemTextSelector="@(donate => donate.SpecificSymbol)" />
+		<HxGridColumn HeaderText="CS" ItemTextSelector="@(donate => donate.ConstantSymbol)" />
+		<HxGridColumn HeaderText="Zpráva" ItemTextSelector="@(donate => donate.Message)" />
+	</Columns>
+</HxGrid>
+
+@code {
+	private async Task<GridDataProviderResult<Donate>> GetGridData(GridDataProviderRequest<Donate> request)
+	{
+		// you usually pass the data-request to your API/DataLayer
+		var response = await DataService.GetDonatesAsync(request.StartIndex, request.Count, request.CancellationToken);
+		return new GridDataProviderResult<Donate>()
+		{
+			Data = response.Data,
+			TotalCount = response.TotalCount
+		};
+	}
+}

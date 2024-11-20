@@ -1,0 +1,18 @@
+﻿@inject NavigationManager NavigationManager
+
+
+<HxSidebar CssClass="sticky-md-top sidebar">
+    <HeaderTemplate>
+        <HxSidebarBrand BrandName="DoCert" BrandNameShort="DC"/>
+        <DoCert.Components.Shared.ColorMode.ColorModeSwitcher/>
+    </HeaderTemplate>
+    <ItemsTemplate>
+        <HxSidebarItem Text="Home" Href="" Match="NavLinkMatch.All" Icon="BootstrapIcon.House" TooltipText="Home" />
+        <HxSidebarItem Text="Donors" Href="Donors" Match="NavLinkMatch.All" Icon="BootstrapIcon.Person" TooltipText="Donors" />
+        <HxSidebarItem Text="Donates" Href="Donates" Match="NavLinkMatch.All" Icon="BootstrapIcon._0Circle" TooltipText="Donates" />
+        <HxSidebarItem Text="Development" Href="dev" Match="NavLinkMatch.All" Icon="BootstrapIcon.BuildingGear" TooltipText="Development" />
+        </ItemsTemplate>
+    <FooterTemplate>
+        <DoCert.Components.Shared.Theme.ThemeSwitcher/>
+    </FooterTemplate>
+</HxSidebar>
