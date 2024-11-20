@@ -5,14 +5,16 @@ using DoCert.DependencyInjection;
 using DoCert.Services;
 using Havit.Blazor.Components.Web;
 using Havit.Blazor.Components.Web.Bootstrap;
-using Havit.Data.EntityFrameworkCore.Patterns.DependencyInjection;
-using Havit.Extensions.DependencyInjection;
-using Havit.Services.Caching;
 using SoloX.BlazorJsBlob;
+using ElectronNET.API;
+using App = DoCert.Components.App;
 
 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
 var builder = WebApplication.CreateBuilder(args);
+
+//builder.WebHost.UseElectron(args);}}
+//builder.WebHost.UseEnvironment("Development");
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -59,3 +61,10 @@ app.MapRazorComponents<App>()
     .AddAdditionalAssemblies(typeof(DoCert.Client._Imports).Assembly);
 
 app.Run();
+
+/*
+var window = await Electron.WindowManager.CreateWindowAsync();
+window.OnClosed += () => {
+    Electron.App.Quit();
+};
+*/

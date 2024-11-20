@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert", "DoCert\DoCert\DoCert.csproj", "{82CEE51F-8741-4386-B28E-888BAC915DBD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert", "DoCert\DoCert.csproj", "{82CEE51F-8741-4386-B28E-888BAC915DBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.Client", "DoCert\DoCert.Client\DoCert.Client.csproj", "{2DD96CE8-B830-41D8-9686-2480DCED75A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.Client", "DoCert.Client\DoCert.Client.csproj", "{2DD96CE8-B830-41D8-9686-2480DCED75A3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.Model", "DoCert.Model\DoCert.Model.csproj", "{34767952-8154-4B74-82F0-EC8D52F01968}"
 EndProject
