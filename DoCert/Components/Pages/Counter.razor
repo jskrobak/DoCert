@@ -1,0 +1,61 @@
+﻿@rendermode InteractiveServer
+@page "/Counter"
+
+<h3>Counter</h3>
+
+<p>Current count: @currentCount</p>
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+<p>
+    <HxButton Text="MessageBox.ShowAsync()..." OnClick="OpenMessageBox" Color="ThemeColor.Primary" />
+    <HxButton Text="MessageBox.Confirm()..." OnClick="OpenConfirm" Color="ThemeColor.Primary" />
+</p>
+
+<p>
+    ShowAsync result: @showResult.ToString("g")<br />
+    Confirm result: @confirmResult
+</p>
+
+<p>
+    <HxButton Text="Mix..." OnClick="@(async () => await box6.ShowAsync())" Color="ThemeColor.Primary" />
+    <HxMessageBox @ref="box6"
+                  Title="Test 6"
+                  Text="Test 6"
+                  Buttons="MessageBoxButtons.Yes | MessageBoxButtons.No | MessageBoxButtons.Ok"
+                  PrimaryButton="MessageBoxButtons.No"
+                  OnClosed="HandleDialogClose" />
+</p>
+
+@code {
+    [Inject] protected IHxMessageBoxService MessageBox { get; set; }
+
+    private int currentCount = 0;
+    private MessageBoxButtons showResult;
+    private bool? confirmResult;
+    HxMessageBox box6;
+    MessageBoxButtons result;
+
+    private Task HandleDialogClose(MessageBoxButtons button)
+    {
+        result = button;
+
+        return Task.CompletedTask;
+    }
+
+    private async Task OpenMessageBox()
+    {
+        showResult = await MessageBox.ShowAsync("Info", "This is the text", MessageBoxButtons.OkCancel);
+    }
+
+    private async Task OpenConfirm()
+    {
+        confirmResult = await MessageBox.ConfirmAsync("Confirm", "Do you really want to ...?");
+    }
+    
+    
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+}

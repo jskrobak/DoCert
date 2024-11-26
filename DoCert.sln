@@ -5,8 +5,6 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert", "DoCert\DoCert.csproj", "{82CEE51F-8741-4386-B28E-888BAC915DBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.Client", "DoCert.Client\DoCert.Client.csproj", "{2DD96CE8-B830-41D8-9686-2480DCED75A3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.Model", "DoCert.Model\DoCert.Model.csproj", "{34767952-8154-4B74-82F0-EC8D52F01968}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.Entity", "DoCert.Entity\DoCert.Entity.csproj", "{E0F9DAEF-687E-459A-8E3D-BF67F24316A9}"
@@ -15,13 +13,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.Contracts", "DoCert.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.DataLayer", "DoCert.DataLayer\DoCert.DataLayer.csproj", "{CCBF924A-6ADC-4FCE-9462-128578169766}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "underware.Data", "underware.Data\underware.Data.csproj", "{D64AC0F4-BE95-467B-A7B9-D76299DD6DC8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "underware.Linq", "underware.Linq\underware.Linq.csproj", "{426A925D-810D-4D7A-A281-A94609BA676B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.Services", "DoCert.Services\DoCert.Services.csproj", "{758CC4AE-3D3E-4846-87D7-0D819222EE32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.DependencyInjection", "DoCert.DependencyInjection\DoCert.DependencyInjection.csproj", "{E436BE6F-7DF7-438A-BA7B-1A71F385ACC9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.Client", "DoCert.Client\DoCert.Client.csproj", "{390A788C-F27F-4F27-AB18-8199CE2DD74E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{090C7C05-373A-4BFF-9987-3C630DF223DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.DependencyInjection", "DoCert.DependencyInjection\DoCert.DependencyInjection.csproj", "{A0ABB0A1-C681-48CA-B5D9-71B718E6D862}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +31,6 @@ Global
 		{82CEE51F-8741-4386-B28E-888BAC915DBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82CEE51F-8741-4386-B28E-888BAC915DBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82CEE51F-8741-4386-B28E-888BAC915DBD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2DD96CE8-B830-41D8-9686-2480DCED75A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2DD96CE8-B830-41D8-9686-2480DCED75A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2DD96CE8-B830-41D8-9686-2480DCED75A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2DD96CE8-B830-41D8-9686-2480DCED75A3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{34767952-8154-4B74-82F0-EC8D52F01968}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{34767952-8154-4B74-82F0-EC8D52F01968}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34767952-8154-4B74-82F0-EC8D52F01968}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,22 +47,22 @@ Global
 		{CCBF924A-6ADC-4FCE-9462-128578169766}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCBF924A-6ADC-4FCE-9462-128578169766}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCBF924A-6ADC-4FCE-9462-128578169766}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D64AC0F4-BE95-467B-A7B9-D76299DD6DC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D64AC0F4-BE95-467B-A7B9-D76299DD6DC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D64AC0F4-BE95-467B-A7B9-D76299DD6DC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D64AC0F4-BE95-467B-A7B9-D76299DD6DC8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{426A925D-810D-4D7A-A281-A94609BA676B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{426A925D-810D-4D7A-A281-A94609BA676B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{426A925D-810D-4D7A-A281-A94609BA676B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{426A925D-810D-4D7A-A281-A94609BA676B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{758CC4AE-3D3E-4846-87D7-0D819222EE32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{758CC4AE-3D3E-4846-87D7-0D819222EE32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{758CC4AE-3D3E-4846-87D7-0D819222EE32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{758CC4AE-3D3E-4846-87D7-0D819222EE32}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E436BE6F-7DF7-438A-BA7B-1A71F385ACC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E436BE6F-7DF7-438A-BA7B-1A71F385ACC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E436BE6F-7DF7-438A-BA7B-1A71F385ACC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E436BE6F-7DF7-438A-BA7B-1A71F385ACC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{390A788C-F27F-4F27-AB18-8199CE2DD74E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{390A788C-F27F-4F27-AB18-8199CE2DD74E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{390A788C-F27F-4F27-AB18-8199CE2DD74E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{390A788C-F27F-4F27-AB18-8199CE2DD74E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{090C7C05-373A-4BFF-9987-3C630DF223DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{090C7C05-373A-4BFF-9987-3C630DF223DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{090C7C05-373A-4BFF-9987-3C630DF223DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{090C7C05-373A-4BFF-9987-3C630DF223DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0ABB0A1-C681-48CA-B5D9-71B718E6D862}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0ABB0A1-C681-48CA-B5D9-71B718E6D862}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0ABB0A1-C681-48CA-B5D9-71B718E6D862}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0ABB0A1-C681-48CA-B5D9-71B718E6D862}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

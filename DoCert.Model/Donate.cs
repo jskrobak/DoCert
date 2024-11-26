@@ -3,7 +3,7 @@
 public class Donate
 {
     public int Id { get; set; }
-    public decimal Amount { get; set; }
+    public double Amount { get; set; }
     public int BankAccountId { get; set; }
     public BankAccount BankAccount { get; set; }
     public int DonorId { get; set; }

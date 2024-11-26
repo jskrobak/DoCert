@@ -11,11 +11,11 @@ public class DoCertDbContext(DbContextOptions options) : Havit.Data.EntityFramew
     public DbSet<BankAccount> BankAccounts { get; init; }
     public DbSet<Donor> Donors { get; init; }
     public DbSet<Donate> Donates { get; init; }
+    public DbSet<ImportProfile> ImportProfiles { get; init; }
 
-    /*
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         //base.OnConfiguring(optionsBuilder);
-        optionsBuilder.UseSqlite("Data Source=..\\..\\..\\data\\docert.db");
-    }*/
+        optionsBuilder.UseSqlite("Data Source=..\\Docert\\Assets\\docert.db");
+    }
 }

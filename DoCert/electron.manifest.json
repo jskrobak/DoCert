@@ -1,0 +1,38 @@
+{
+  "executable": "docert",
+  "splashscreen": {
+    "imageFile": "/wwwroot/assets/img/electron_app_splashscreen.png"
+  },
+  "name": "DoCert",
+  "author": "Jakub Škrobák",
+  "singleInstance": false,
+  "environment": "Production",
+  "build": {
+    "appId": "DoCert",
+    "productName": "DoCert",
+    "copyright": "Copyright © 2024",
+    "buildVersion": "1.0.0",
+    "compression": "maximum",
+    "win": {
+      "icon": "Assets/dcicon.ico"
+    },
+    "directories": {
+      "output": "../../../bin/Desktop"
+    },
+    "extraResources": [
+      {
+        "from": "./bin",
+        "to": "bin",
+        "filter": [ "**/*" ]
+      }
+    ],
+    "files": [
+      {
+        "from": "./ElectronHostHook/node_modules",
+        "to": "ElectronHostHook/node_modules",
+        "filter": [ "**/*" ]
+      },
+      "**/*"
+    ]
+  }
+}

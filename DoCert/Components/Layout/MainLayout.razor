@@ -2,13 +2,12 @@
 
 <PageTitle>@_title</PageTitle>
 
-<HxMessenger Position="ToastContainerPosition.MiddleCenter" />
-<HxMessageBoxHost />
-
 <div class="doc-container container-fluid d-md-flex min-vh-100">
     <Sidebar />
 
     <div style="min-width: 0;" class="doc-content main p-md-4 pt-0 flex-grow-1 overflow-hidden">
+        <HxMessenger Position="ToastContainerPosition.MiddleCenter" />
+        <HxMessageBoxHost />
         @Body
     </div>
 </div>

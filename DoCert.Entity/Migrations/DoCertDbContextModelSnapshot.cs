@@ -38,8 +38,8 @@ namespace DoCert.Entity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("Amount")
+                        .HasColumnType("REAL");
 
                     b.Property<int>("BankAccountId")
                         .HasColumnType("INTEGER");
@@ -96,6 +96,60 @@ namespace DoCert.Entity.Migrations
                     b.ToTable("Donors");
                 });
 
+            modelBuilder.Entity("DoCert.Model.ImportProfile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AccountNumberColumnIndex")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AmountColumnIndex")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ConstantSymbolColumnIndex")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CultureInfo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("DateColumnIndex")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Delimiter")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("DonorNameColumnIndex")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Encoding")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("HasHeaderRecord")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MessageColumnIndex")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("SpecificSymbolColumnIndex")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("VariableSymbolColumnIndex")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ImportProfiles");
+                });
+
             modelBuilder.Entity("Havit.Data.EntityFrameworkCore.Model.DataSeedVersion", b =>
                 {
                     b.Property<string>("ProfileName")
@@ -116,13 +170,13 @@ namespace DoCert.Entity.Migrations
                     b.HasOne("DoCert.Model.BankAccount", "BankAccount")
                         .WithMany()
                         .HasForeignKey("BankAccountId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DoCert.Model.Donor", "Donor")
                         .WithMany()
                         .HasForeignKey("DonorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("BankAccount");

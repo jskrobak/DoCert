@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using DoCert.Services;
+using Microsoft.AspNetCore.Components;
 
 namespace DoCert.Components.Layout;
 
@@ -8,9 +9,9 @@ public partial class MainLayout
     private const string TitleSeparator = " | ";
 
     [Inject] protected NavigationManager NavigationManager { get; set; }
-
+    
     private string _title;
-
+    
     protected override void OnParametersSet()
     {
         var path = new Uri(NavigationManager.Uri).AbsolutePath.TrimEnd('/');
