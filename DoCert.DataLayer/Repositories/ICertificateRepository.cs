@@ -9,4 +9,6 @@ public interface ICertificateRepository: IRepository<Certificate>
 {
     Task<DataFragment<Certificate>> GetFragmentAsync(CertificateFilter filter, GridDataProviderRequest<Certificate> request,
         CancellationToken cancellationToken = default);
+
+    Task<bool> AnyAsync();
 }

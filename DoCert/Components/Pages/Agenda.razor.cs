@@ -83,10 +83,9 @@ public partial class Agenda : ComponentBase
             await DataService.InsertAgendaAsync(agenda);
         }
 
-        logoPngBase64 = agenda.LogoPng != null
-            ? $"data:image/png;base64, {Convert.ToBase64String(agenda.LogoPng)}"
-            : "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
-
+        if (agenda.LogoPng != null)
+            logoPngBase64 = $"data:image/png;base64, {Convert.ToBase64String(agenda.LogoPng)}";
+            
         if(agenda.StamperPng != null)
             stamperPngBase64 = $"data:image/png;base64, {Convert.ToBase64String(agenda.StamperPng)}";
     }
@@ -107,12 +106,6 @@ public partial class Agenda : ComponentBase
 
     private async Task LoadLogoFileClicked()
     {
-        if(Electron.WindowManager.BrowserWindows.Count == 0)
-        {
-            await SaveLogoFile(@"c:\Data\Projects\private\DoCert\data\CB-logo-symbol-cerna.png");
-            return;
-        }
-        
         var mainWindow = Electron.WindowManager.BrowserWindows.First();
         var dialogOptions = new OpenDialogOptions()
         {
@@ -162,12 +155,6 @@ public partial class Agenda : ComponentBase
 
     private async Task HandleTestReportClick()
     {
-        if (Electron.WindowManager.BrowserWindows.Count == 0)
-        {
-            await TestPdf(@"test.pdf");
-            return;
-        }
-            
         var mainWindow = Electron.WindowManager.BrowserWindows.First();
         var dialogOptions = new SaveDialogOptions()
         {
@@ -212,12 +199,6 @@ public partial class Agenda : ComponentBase
 
     private async Task HandleBackupClick()
     {
-        if (Electron.WindowManager.BrowserWindows.Count == 0)
-        {
-            BackupService.Backup("backup.zip");
-            return;
-        }
-     
         var mainWindow = Electron.WindowManager.BrowserWindows.First();
         var dialogOptions = new SaveDialogOptions()
         {
@@ -266,12 +247,6 @@ public partial class Agenda : ComponentBase
 
     private async Task LoadStamperFileClicked()
     {
-        if(Electron.WindowManager.BrowserWindows.Count == 0)
-        {
-            await SaveStamperFile(@"c:\Data\Projects\private\DoCert\data\CBPraha13StamperAndSignature.png");
-            return;
-        }
-        
         var mainWindow = Electron.WindowManager.BrowserWindows.First();
         var dialogOptions = new OpenDialogOptions()
         {

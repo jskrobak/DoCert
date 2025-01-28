@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.Services", "DoCert.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoCert.DependencyInjection", "DoCert.DependencyInjection\DoCert.DependencyInjection.csproj", "{A0ABB0A1-C681-48CA-B5D9-71B718E6D862}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Docert.Playground", "Docert.Playground\Docert.Playground.csproj", "{36964FE4-E4D9-44DB-BEF0-D1FDE19E8A5F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,10 +51,6 @@ Global
 		{A0ABB0A1-C681-48CA-B5D9-71B718E6D862}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0ABB0A1-C681-48CA-B5D9-71B718E6D862}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0ABB0A1-C681-48CA-B5D9-71B718E6D862}.Release|Any CPU.Build.0 = Release|Any CPU
-		{36964FE4-E4D9-44DB-BEF0-D1FDE19E8A5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{36964FE4-E4D9-44DB-BEF0-D1FDE19E8A5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{36964FE4-E4D9-44DB-BEF0-D1FDE19E8A5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{36964FE4-E4D9-44DB-BEF0-D1FDE19E8A5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

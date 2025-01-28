@@ -123,7 +123,7 @@ public partial class Certificates : ComponentBase
         if (agenda.MailAccount.IsTest) req.Title += " (TESTOVACÍ REŽIM)";
 
 
-    if (await MessageBox.ShowAsync(req) == MessageBoxButtons.Cancel)
+        if (await MessageBox.ShowAsync(req) == MessageBoxButtons.Cancel)
             return;
         
             
@@ -151,6 +151,20 @@ public partial class Certificates : ComponentBase
 
     private async Task HandleImportClick()
     {
+        if (await DataService.ExistCertificate())
+        {
+            var req = new MessageBoxRequest()
+            {
+                Title = $"Smazat existující potvrzení?",
+                Text = "Existující potvrzení. Budou smazána a nahrazena novými.",
+                Buttons = MessageBoxButtons.OkCancel
+            };
+        
+            if (await MessageBox.ShowAsync(req) == MessageBoxButtons.Cancel)
+                return;    
+        }
+        
+        
         try
         {
             await DataService.CalculateCertificates();

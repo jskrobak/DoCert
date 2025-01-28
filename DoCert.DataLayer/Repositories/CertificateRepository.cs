@@ -39,7 +39,12 @@ public class CertificateRepository(
             TotalCount = cnt
         };
     }
-    
+
+    public Task<bool> AnyAsync()
+    {
+        return Data.AnyAsync();
+    }
+
     private IQueryable<Certificate> Filter(IQueryable<Certificate> data, CertificateFilter filter)
     {
         return

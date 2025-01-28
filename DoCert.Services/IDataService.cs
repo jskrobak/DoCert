@@ -34,4 +34,5 @@ public interface IDataService
     Task CalculateCertificates(CancellationToken cancellationToken = default);
     Task DeleteCertificatesAsync(IEnumerable<Certificate> list, CancellationToken cancellationToken = default);
     Task<IEnumerable<Donor>> GetDonorsWithoutCertificate();
+    Task<bool> ExistCertificate();
 }

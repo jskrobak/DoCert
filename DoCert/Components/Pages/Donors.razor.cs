@@ -61,12 +61,6 @@ public partial class Donors : ComponentBase
     private async Task HandleImportCsv()
     {
         
-        if (!HybridSupport.IsElectronActive)
-        {
-            await Import(@"c:\Data\Projects\private\DoCert\data\data.xlsx");
-            return;
-        }
-
         var mainWindow = Electron.WindowManager.BrowserWindows.First();
         var dialogOptions = new OpenDialogOptions()
         {
@@ -107,9 +101,9 @@ public partial class Donors : ComponentBase
         await importCsvOffCanvasComponent.HideAsync();
     }
 
-    private Task HandleDeleteSelected()
+    private async Task HandleDeleteSelected()
     {
-        throw new NotImplementedException();
+        Messenger.AddError("Not implemented yet.");
     }
 
     private async Task SaveDonor()

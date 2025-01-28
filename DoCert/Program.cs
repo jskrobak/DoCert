@@ -6,6 +6,7 @@ using DoCert.Services;
 using Havit.Blazor.Components.Web;
 using Havit.Blazor.Components.Web.Bootstrap;
 using ElectronNET.API;
+using ElectronNET.API.Entities;
 using NLog.Extensions.Logging;
 using App = DoCert.Components.App;
 
@@ -76,11 +77,20 @@ app.MapRazorComponents<App>()
 
 if (HybridSupport.IsElectronActive)
 {
-    ElectronHelper.CreateMenu();
-    await ElectronHelper.CreateElectronWindowAsync();
-    Electron.App.Quitting += async () =>
+    Electron.Menu.SetApplicationMenu([]);
+    
+    var window = await Electron.WindowManager.CreateWindowAsync(new BrowserWindowOptions()
     {
-        await app.StopAsync();
+        WebPreferences = new WebPreferences()
+        {
+            NodeIntegration = false
+        },
+        TitleBarStyle = TitleBarStyle.customButtonsOnHover
+    });
+    
+    window.OnClosed += () =>
+    {
+        Electron.App.Quit();
     };
 }
 

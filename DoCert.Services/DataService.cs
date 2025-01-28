@@ -283,4 +283,9 @@ public class DataService(IDonateRepository donateRepository,
     {
         return await donorRepository.GetAllWithoutCertificate();
     }
+
+    public async Task<bool> ExistCertificate()
+    {
+        return await certificateRepository.AnyAsync();
+    }
 }
