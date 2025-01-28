@@ -1,8 +1,116 @@
 ﻿@page "/"
+@using DoCert.Services
 @using ElectronNET.API
+@using _Imports = Havit.Blazor.Components.Web.Bootstrap._Imports
+@inject IJSRuntime JSRuntime;
 
-<PageTitle>Home</PageTitle>
+@code {
+    private async Task HandleAuthorClick()
+    {
+        await OpenLinkAsync("https://github.com/jskrobak");
+    }
 
-<h1>DoCert - Správce potvrzení o darech</h1>
+    private async Task HandleProjectClick()
+    {
+        await OpenLinkAsync("https://github.com/jskrobak/DoCert");
+    }
 
-Welcome to your new app.
+    private async Task OpenLinkAsync(string url)
+    {
+        if(HybridSupport.IsElectronActive)
+            await Electron.Shell.OpenExternalAsync(url);
+        else
+            await JSRuntime.InvokeAsync<object>("open", [url, "_blank"]);
+    }
+}
+
+<PageTitle>DoCert</PageTitle>
+
+<h3>Vítejte</h3>
+
+<p>
+    Docert (DOnation CERTificate manager) je aplikace pro správu potvrzení o darech.    
+</p>
+
+<br/>
+<br/>
+
+<h4>Jak na to?</h4>
+
+<ol class="list-group list-group-numbered">
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+            <div class="fw-bold">Dárci</div>
+            <p>
+                Nejprve budete potřebovat seznam dárců.    
+            </p>
+            <p>
+                Můžete je zadat ručně nebo importovat z Excelu.   
+            </p>
+            <p>
+                Aby bylo možno dárce spárovat s platbou, musí mít dárce vyplněno číslo účtu
+                (pro jednoduchost a univerzálnost doporučujeme použít IBAN) nebo správný variabilní symbol (VS).    
+            </p> 
+            <p>
+                Datum narození je zase nutný pro identifikaci dárce pro potřeby finančního úřadu.    
+            </p>
+             
+        </div>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+            <div class="fw-bold">Dary</div>
+            <p>Tabulka darů obsahuje seznam přijatých plateb.</p>
+            <p>
+                Opět je můžete zadat ručně nebo importovat z Excelu. Excelovou tabulku si snadno můžete připravit z elektronického výpisu z bankovního účtu.
+            </p>
+            <p>
+                Aplikace předpokládá, že seznam darů obsahuje platby za minulý rok. 
+            </p>
+        </div>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+            <div class="fw-bold">Potvrzení</div>
+            <p>
+                Jakmile máte připravená data o dárcích a darech, můžete vytvářet potvrzení.     
+            </p>
+            <p>
+                Import potvrzení zpracuje data a vygeneruje automaticky potvrzení o darech za minulý rok.
+                Každé potvrzení lze manuálně upravit. 
+                Také lze vytvořit potvrzení ručně (pokud např. chcete rozdělit dary mezi manžely apod.).
+            </p>
+            <p>
+                Potvrzení můžete uložit od pdf nebo odeslat emailem a to jak po jednom, tak hromadně.
+            </p>
+        </div>
+    </li>
+</ol>
+
+<br/>
+<br/>
+
+<h4>Kam se ukládají data?</h4>
+<p>
+    Data o darech jsou citlivá a proto je aplikace navržena tak, aby data neopustila počítač uživatele.
+    Aplikace pracuje s databázovým souborem, který je uložen v profilu uživatele (typicky v c:\Users\[uživatel]ŠkrobákJakub]\AppData\Roaming\DoCert\), mimo adresář aplikace. 
+    Při prvním spuštění se vytvoří nový databázový soubor docert.db, pokud již v profilu uživatele neexistuje z předchozího použití aplikace.
+    Se souborem se dá manipulovat při vypnuté aplikaci, např. zálohovat, přesouvat na jiný počítač apod. 
+</p>
+
+<br/>
+<br/>
+
+<h4>Autor</h4>
+<p>
+    <HxButton Outline="true" Color="ThemeColor.Link" Icon="BootstrapIcon.Person" OnClick="HandleAuthorClick">Jakub Škrobák</HxButton> 
+</p>
+<p>
+    Aplikace je opensource a její zdrojový kód je dostupný na
+    <HxButton Outline="true" Color="ThemeColor.Link" Icon="BootstrapIcon.Github" OnClick="HandleProjectClick">https://github.com/jskrobak/DoCert</HxButton>
+</p>
+
+
+
+
+

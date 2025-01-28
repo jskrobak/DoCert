@@ -13,8 +13,9 @@
     "copyright": "Copyright © 2024",
     "buildVersion": "1.0.0",
     "compression": "maximum",
+    "asar": false,
     "win": {
-      "icon": "Assets/dcicon.ico"
+      "icon": "/bin/Assets/dcicon.ico"
     },
     "directories": {
       "output": "../../../bin/Desktop"

@@ -28,7 +28,6 @@ public class DonateRepository(
     {
         var filtered = Filter(Data
             .Include(d => d.Donor)
-            .Include(d => d.BankAccount)
             , filter);
 
         var cnt = await filtered.CountAsync(cancellationToken);
@@ -40,6 +39,18 @@ public class DonateRepository(
             Data = data,
             TotalCount = cnt
         };
+    }
+
+    public async Task<double> CalculateDonatesSumAsync(int donorId, int year,
+        CancellationToken cancellationToken = default)
+    {
+        var startDate = new DateTime(year, 1, 1);
+        var endDate = new DateTime(year + 1, 1, 1);
+
+        return await Data.Where(d => d.DonorId == donorId
+                                     && d.Date >= startDate
+                                     && d.Date < endDate)
+            .SumAsync(d => d.Amount, cancellationToken);
     }
 
     private IQueryable<Donate> Filter(IQueryable<Donate> data, DonateFilter filter)

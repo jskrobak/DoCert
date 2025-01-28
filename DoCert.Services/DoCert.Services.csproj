@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
@@ -13,9 +13,25 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Bogus" Version="35.6.1" />
-      <PackageReference Include="CsvHelper" Version="33.0.1" />
-      <PackageReference Include="Havit.Blazor.Components.Web.Bootstrap" Version="4.7.1" />
+      <PackageReference Include="ExcelDataReader" Version="3.7.0" />
+      <PackageReference Include="Havit.Blazor.Components.Web.Bootstrap" Version="4.7.8" />
+      <PackageReference Include="Havit.Data.Patterns" Version="2.1.28" />
+      <PackageReference Include="Havit.Services" Version="2.0.46" />
+      <PackageReference Include="QuestPDF" Version="2024.12.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\arial.ttf" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\arial.ttf" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.DataProtection.Abstractions">
+        <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\9.0.0\Microsoft.AspNetCore.DataProtection.Abstractions.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

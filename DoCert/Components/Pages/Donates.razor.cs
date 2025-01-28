@@ -12,13 +12,11 @@ public partial class Donates : ComponentBase
     [Inject] protected IHxMessengerService Messenger { get; set; }
     [Inject] protected IHxMessageBoxService MessageBox { get; set; }
     
+    private HashSet<Donate> selectedDonates = [];
     private HxOffcanvas importCsvOffCanvasComponent;
     private Donate currentDonate;
     private DonateFilter filterModel = new();
     private HxGrid<Donate> gridComponent;
-    private ImportProfile importProfile;
-    private List<ImportProfile> importProfiles;
-    private string csvFilePath;
 
     private async Task<GridDataProviderResult<Donate>> GetGridData(GridDataProviderRequest<Donate> request)
     {
@@ -38,25 +36,6 @@ public partial class Donates : ComponentBase
 
     private async Task HandleImportCsvClicked()
     {
-        var mainWindow = Electron.WindowManager.BrowserWindows.First();
-        var dialogOptions = new OpenDialogOptions()
-        {
-            Title = "Vyberte CSV soubor",
-            DefaultPath = await Electron.App.GetPathAsync(PathName.Documents),
-            Filters = [new FileFilter { Name = "CSV", Extensions = ["csv"] }],
-            //Properties = [OpenDialogProperty.openFile]
-        };
-
-        var files = await Electron.Dialog.ShowOpenDialogAsync(mainWindow, dialogOptions);
-
-        if (files == null) return;
-        if (files.Length == 0) return;
-        if (!File.Exists(files[0])) return;
-
-        csvFilePath = files[0];
-        
-        importProfiles = await DataService.GetImportProfilesAsync();
-        
         await importCsvOffCanvasComponent.ShowAsync();
     }
 
@@ -74,17 +53,75 @@ public partial class Donates : ComponentBase
         currentDonate = new Donate();
         // open or navigate to employee detail here
         // await dataItemEditComponent.ShowAsync();
-        
+
+        throw new Exception("ycyxcxycy");
     }
 
     private async Task HandleImportCsv()
     {
-        using var sr = new StreamReader(csvFilePath);
-        await DataService.ImportDonatesFromCsvAsync(sr, importProfile);
+        if (!HybridSupport.IsElectronActive)
+        {
+            await Import(@"c:\Data\Projects\private\DoCert\data\data.xlsx");
+            return;
+        }
+
+        var mainWindow = Electron.WindowManager.BrowserWindows.First();
+        var dialogOptions = new OpenDialogOptions()
+        {
+            Title = "Vyberte Xlsx soubor",
+            DefaultPath = await Electron.App.GetPathAsync(PathName.Documents),
+            Filters = [new FileFilter { Name = "XLSX", Extensions = ["xlsx"] }],
+            //Properties = [OpenDialogProperty.openFile]
+        };
+
+        var files = await Electron.Dialog.ShowOpenDialogAsync(mainWindow, dialogOptions);
+
+        if (files == null) return;
+        if (files.Length == 0) return;
+        if (!File.Exists(files[0])) return;
+
+        var filePath = files[0];
         
-        await gridComponent.RefreshDataAsync();
+        await Import(filePath);
+        
+       
+    }
+
+    private async Task Import(string filePath)
+    {
+        try
+        {
+            await using var stream = File.OpenRead(filePath);
+            await DataService.ImportDonatesFromExcelAsync(stream);
+            await gridComponent.RefreshDataAsync();
+            Messenger.AddInformation("Import proběhl úspěšně.");
+        }
+        catch (Exception ex)
+        {
+            Messenger.AddError($"Import se nezdařil. Chyba: {ex.Message}");
+        }
+        
         
         await importCsvOffCanvasComponent.HideAsync();
+    }
+
+    private async Task HandleDeleteSelected()
+    {
+        if (selectedDonates.Count == 0)
+        {
+            Messenger.AddError("Označte potvrzení, která chcete smazat.");
+            return;
+        }
+        try
+        {
+            await DataService.DeleteDonatesAsync(selectedDonates);
+            await gridComponent.RefreshDataAsync();
+            Messenger.AddInformation("Smazáno");
+        }
+        catch (Exception ex)
+        {
+            Messenger.AddError($"Chyba při mazání: {ex.Message}");
+        }
     }
 }
 

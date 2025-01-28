@@ -1,5 +1,4 @@
-﻿@rendermode InteractiveServer
-@page "/donates"
+﻿@page "/donates"
 @using DoCert.Model
 @using DoCert.Services
 
@@ -8,8 +7,13 @@
 <style>
 	.scrollable-table-container {
 		overflow: auto;
-		height: calc(100vh - 140px);
+		height: calc(100vh - 200px);
 	}
+	.contextDropdownToggleButton::after {
+
+		content: none;
+	}
+
 </style>
 
 <PageTitle>Dary</PageTitle>
@@ -21,9 +25,19 @@
 		<HxButton Text="Nový dar" 
 		          Color="ThemeColor.Primary" 
 		          Icon="BootstrapIcon.PlusLg" OnClick="HandleNewItemClicked" />
-		<HxButton Text="Import z CSV"
+		<HxButton Text="Import z Xls"
 		          Color="ThemeColor.Primary"
-		          Icon="BootstrapIcon.FiletypeCsv" OnClick="HandleImportCsvClicked" />
+		          Icon="BootstrapIcon.FiletypeXlsx" OnClick="HandleImportCsvClicked" />
+
+		<HxDropdownButtonGroup>
+			<HxDropdownToggleButton CssClass="contextDropdownToggleButton" Color="ThemeColor.Secondary" Icon="BootstrapIcon.ThreeDots">
+			</HxDropdownToggleButton>
+			<HxDropdownMenu>
+				<HxDropdownItem Icon="BootstrapIcon.Trash"
+				                OnClick="HandleDeleteSelected">Smazat označené</HxDropdownItem>
+			</HxDropdownMenu>
+		</HxDropdownButtonGroup>
+		
 	</CommandsTemplate>
 	<FilterTemplate Context="filterContext">
 		<HxInputText Label="Dárce" @bind-Value="filterContext.DonorName" />
@@ -31,7 +45,8 @@
 		</FilterTemplate>
 	<DataTemplate>
 		<HxGrid @ref="gridComponent"
-				ContentNavigationMode="GridContentNavigationMode.InfiniteScroll"
+		        ContentNavigationMode="GridContentNavigationMode.Pagination"
+		        PageSize="1000"
 		        TableContainerCssClass="scrollable-table-container"
 		        HeaderRowCssClass="sticky-top"
 		        FooterRowCssClass="sticky-bottom"
@@ -39,7 +54,10 @@
 		        DataProvider="GetGridData"
 		        @bind-SelectedDataItem="currentDonate"
 		        @bind-SelectedDataItem:after="HandleSelectedDataItemChanged"
-		        Responsive="true">
+		        Responsive="true"
+		        MultiSelectionEnabled="true"
+		        @bind-SelectedDataItems="selectedDonates"
+		        PreserveSelection="false">
 			<Columns>
 				<HxGridColumn HeaderText="Datum" 
 				              ItemTextSelector="@(donate => donate.Date.ToString("d"))" 
@@ -56,17 +74,11 @@
 				              HeaderCssClass="text-end"
 				              SortKeySelector="d => d.Amount"/>
 				<HxGridColumn HeaderText="Účet" 
-				              ItemTextSelector="@(donate => donate.BankAccount?.AccountNumber)"
-				              SortKeySelector="d => d.BankAccount.AccountNumber"/>
+				              ItemTextSelector="@(donate => donate.Iban)"
+				              SortKeySelector="d => d.Iban"/>
 				<HxGridColumn HeaderText="VS" 
 				              ItemTextSelector="@(donate => donate.VariableSymbol)"
 				              SortKeySelector="d => d.VariableSymbol"/>
-				<HxGridColumn HeaderText="SS" 
-				              ItemTextSelector="@(donate => donate.SpecificSymbol)"
-				              SortKeySelector="d => d.SpecificSymbol"/>
-				<HxGridColumn HeaderText="CS" 
-				              ItemTextSelector="@(donate => donate.ConstantSymbol)"
-				              SortKeySelector="d => d.ConstantSymbol"/>
 				<HxGridColumn HeaderText="Zpráva"
 				              ItemTextSelector="@(donate => donate.Message)"
 				              SortKeySelector="d => d.Message">
@@ -90,80 +102,25 @@
 	</DetailTemplate>
 </HxListLayout>
 
-<HxOffcanvas @ref="importCsvOffCanvasComponent" Title="Import CSV" Backdrop="OffcanvasBackdrop.Static">
+<HxOffcanvas @ref="importCsvOffCanvasComponent" Title="Import Xls" Backdrop="OffcanvasBackdrop.Static">
 	<BodyTemplate>
+		<h5>Specifikace Xls souboru:</h5>
+		První řádek obsahuje názvy sloupců
 
-		<HxSelect TItem="ImportProfile"
-		          TValue="ImportProfile"
-		          Label="Profil"
-		          Data="importProfiles"
-		          @bind-Value="importProfile"
-		          TextSelector="@(p => p.Name)"
-		          Nullable="true"
-		          NullText="- vyber profil -"
-		          NullDataText="Loading profiles..." />
-		
-		@*
-		<HxSelect TItem="KeyValuePair<int, string>"
-		          TValue="int?"
-		          Label="Datum"
-		          Data="csvColumns"
-		          @bind-Value="csvMapping.DateColumnIndex"
-		          TextSelector="@(column => column.Value)"
-		          ValueSelector="@(column => column.Key)"
-		          Nullable="true"
-		          NullText="- vyber sloupec -"
-		          NullDataText="Loading columns..." />
-
-		<HxSelect TItem="KeyValuePair<int, string>"
-		          TValue="int?"
-		          Label="Částka"
-		          Data="csvColumns"
-		          @bind-Value="csvMapping.AmountColumnIndex"
-		          TextSelector="@(column => column.Value)"
-		          ValueSelector="@(column => column.Key)"
-		          Nullable="true"
-		          NullText="- vyber sloupec -"
-		          NullDataText="Loading columns..." />
-
-		<HxSelect TItem="KeyValuePair<int, string>"
-		          TValue="int?"
-		          Label="Dárce"
-		          Data="csvColumns"
-		          @bind-Value="csvMapping.DonorNameColumnIndex"
-		          TextSelector="@(column => column.Value)"
-		          ValueSelector="@(column => column.Key)"
-		          Nullable="true"
-		          NullText="- vyber sloupec -"
-		          NullDataText="Loading columns..." />
-
-		<HxSelect TItem="KeyValuePair<int, string>"
-		          TValue="int?"
-		          Label="Číslo účtu"
-		          Data="csvColumns"
-		          @bind-Value="csvMapping.AccountNumberColumnIndex"
-		          TextSelector="@(column => column.Value)"
-		          ValueSelector="@(column => column.Key)"
-		          Nullable="true"
-		          NullText="- vyber sloupec -"
-		          NullDataText="Loading columns..." />
-
-		<HxSelect TItem="KeyValuePair<int, string>"
-		          TValue="int?"
-		          Label="VS"
-		          Data="csvColumns"
-		          @bind-Value="csvMapping.VariableSymbolColumnIndex"
-		          TextSelector="@(column => column.Value)"
-		          ValueSelector="@(column => column.Key)"
-		          Nullable="true"
-		          NullText="- vyber sloupec -"
-		          NullDataText="Loading columns..." />
-		          *@
+		<h6>Sloupce</h6>
+		<ul>
+			<li>Jméno plátce</li>
+			<li>Datum platby</li>
+			<li>IBAN</li>
+			<li>Variabilní symbol</li>
+			<li>Částka CZK</li>
+			<li>Poznámka</li>
+		</ul>
 	</BodyTemplate>
 	<FooterTemplate>
 	<HxButton Text="Importovat" 
 	          Color="ThemeColor.Primary" 
-	          Icon="BootstrapIcon.FiletypeCsv" 
+	          Icon="BootstrapIcon.FiletypeXlsx" 
 	          OnClick="HandleImportCsv" />
 	</FooterTemplate>
 </HxOffcanvas>

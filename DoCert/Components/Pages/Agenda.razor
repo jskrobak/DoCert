@@ -1,0 +1,79 @@
+﻿@page "/agenda"
+@using DoCert.Model
+@using Microsoft.AspNetCore.DataProtection
+
+<PageTitle>Agenda</PageTitle>
+
+<HxTabPanel InitialActiveTabId="tabAgenda">
+    <HxTab Title="Agenda" Id="tabAgenda">
+        <Content>
+            <br/>
+            <EditForm Model="@agenda" OnValidSubmit="@(() => { SaveAgenda(); })">
+                <DataAnnotationsValidator/>
+
+                <HxInputText Label="Organizace" @bind-Value="@agenda.Organization"/>
+                <HxInputText Label="Adresa" @bind-Value="@agenda.Address"/>
+                <HxInputText Label="IČ" @bind-Value="@agenda.RegNumber"/>
+                <HxInputText Label="Telefon" @bind-Value="@agenda.PhoneNumber"/>
+                <HxInputText Label="E-mail" @bind-Value="@agenda.Email"/>
+                <HxInputText Label="Jméno vydávajícího" @bind-Value="@agenda.IssuerName"/>
+                <HxInputText Label="Pozice vydávajícího" @bind-Value="@agenda.IssuerPosition"/>
+                <HxInputText Label="Šablona pro místo a datum vydání" @bind-Value="@agenda.PlaceAndDateTemplate"/>
+
+                <HxInputTextArea Label="Šablona pro tělo potvrzení" @bind-Value="@agenda.BodyTemplate"/>
+                <HxInputTextArea Label="Text patičky potvrzení" @bind-Value="@agenda.FooterText"/>
+
+                <HxInputText Label="Subjekt e-mailu" @bind-Value="@agenda.MailSubject"/>
+                <HxInputTextArea Label="Šablona pro tělo e-mailu" @bind-Value="@agenda.MailBody"/>
+
+                <HxSubmit Color="ThemeColor.Primary" @onclick="SaveAgenda">Uložit</HxSubmit>
+                <HxSubmit Color="ThemeColor.Warning" @onclick="HandleTestReportClick">Test pdf</HxSubmit>
+
+            </EditForm>
+        </Content>
+    </HxTab>
+    <HxTab Id="tabImages">
+        <TitleTemplate>Grafika</TitleTemplate>
+        <Content>
+            <br/>
+            <img id="logo" src="@logoPngBase64" alt="logo" height="50px" class="agenda-logo"/>
+            <br/>
+            <HxButton Color="ThemeColor.Primary" Icon="BootstrapIcon.Image" @onclick="LoadLogoFileClicked">Vybrat soubor</HxButton>
+            <br/>
+            <img id="stamper" src="@stamperPngBase64" alt="stamper" height="50px" class="agenda-logo"/>
+            <br/>
+            <HxButton Color="ThemeColor.Primary" Icon="BootstrapIcon.Image" @onclick="LoadStamperFileClicked">Vybrat soubor</HxButton>
+        </Content>
+    </HxTab>
+    <HxTab Id="tabMailAccount">
+        <TitleTemplate>E-mailový účet</TitleTemplate>
+        <Content>
+            <br/>
+            <EditForm Model="@mailAccount" OnValidSubmit="@(() => { SaveMailAccount(); })">
+                <DataAnnotationsValidator/>
+                <HxInputText Label="Název"
+                             @bind-Value="@mailAccount.Name"/>
+                <HxCheckbox Label="Testovací režim (E-mail se odešle pouze na adresu odesílatele)"
+                            @bind-Value="@mailAccount.IsTest"/>
+                <HxInputText Label="Host" @bind-Value="@mailAccount.Host"/>
+                <HxInputNumber Decimals="0" Label="Port" @bind-Value="@mailAccount.Port"/>
+                <HxCheckbox Label="Ssl" @bind-Value="@mailAccount.UseSsl"/>
+                <HxInputText Label="Uživate" @bind-Value="@mailAccount.Username"/>
+                <HxInputText Label="Heslo" @bind-Value="@mailAccount.ClearPassword"/>
+                <HxInputText Label="Adresa odesílatele" @bind-Value="@mailAccount.SenderEmail"/>
+                <HxInputText Label="Bcc" @bind-Value="@mailAccount.Bcc"/>
+
+                <HxSubmit Color="ThemeColor.Primary" @onclick="SaveMailAccount">Uložit</HxSubmit>
+            </EditForm>
+        </Content>
+    </HxTab>
+    <HxTab Id="tabBackuo">
+        <TitleTemplate>Záhování</TitleTemplate>
+        <Content>
+            <HxSubmit Color="ThemeColor.Primary" @onclick="HandleBackupClick">Zálohovat</HxSubmit>
+            <HxSubmit Color="ThemeColor.Warning" @onclick="HandleRestoreClick"
+                      ConfirmationQuestion="@($"Původní databáte bude přepsána a aplikace se restartuje.")">Obnovit ze zálohy</HxSubmit>
+        </Content>
+    </HxTab>
+    
+</HxTabPanel>

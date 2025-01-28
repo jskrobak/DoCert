@@ -1,0 +1,136 @@
+﻿@page "/Donors"
+@using DoCert.Model
+@using DoCert.Services
+
+@inject IDataService DataService;
+
+<style>
+    .scrollable-table-container {
+        overflow: auto;
+        height: calc(100vh - 160px);
+    }
+    .contextDropdownToggleButton::after {
+
+        content: none;
+    }
+
+</style>
+
+<HxModal @ref="donorEditModal" ShowCloseButton="true">
+    <HeaderTemplate>
+        Editace dárce
+    </HeaderTemplate>
+    <BodyTemplate>
+        <Content>
+            <EditForm Model="@currentDonor" OnValidSubmit="@(async() => { await SaveDonor(); })">
+                <DataAnnotationsValidator />
+
+                <HxInputText Label="Jméno" @bind-Value="@currentDonor.Name" />
+                <HxInputText Label="IBAN" @bind-Value="@currentDonor.IBAN" />
+                <HxInputText Label="VS" @bind-Value="@currentDonor.VariableSymbol" />
+                <HxInputDate Label="Datum narození"  @bind-Value="@currentDonor.Birthdate" />
+                <HxInputText Label="Email" @bind-Value="@currentDonor.Email" />
+
+                <HxSubmit Color="ThemeColor.Primary" @onclick="SaveDonor">Uložit</HxSubmit>
+
+            </EditForm>
+        </Content>
+    </BodyTemplate>
+</HxModal>
+
+<PageTitle>Dárci</PageTitle>
+
+<HxListLayout Title="Dárci" TFilterModel="DonorFilter"
+              @bind-FilterModel="filterModel"
+              @bind-FilterModel:after="gridComponent.RefreshDataAsync">
+    <CommandsTemplate>
+        <HxButton Text="Nový dárce"
+                  Color="ThemeColor.Primary"
+                  Icon="BootstrapIcon.PlusLg" OnClick="HandleNewItemClicked" />
+        <HxDropdownButtonGroup>
+            <HxDropdownToggleButton CssClass="contextDropdownToggleButton" Color="ThemeColor.Secondary" Icon="BootstrapIcon.ThreeDots">
+            </HxDropdownToggleButton>
+            <HxDropdownMenu>
+                <HxDropdownItem Icon="BootstrapIcon.FileExcel" OnClick="HandleImportCsvClicked">Import z Excelu</HxDropdownItem>
+                <HxDropdownItem Icon="BootstrapIcon.Trash" OnClick="HandleDeleteSelected">Smazat označené</HxDropdownItem>
+            </HxDropdownMenu>
+        </HxDropdownButtonGroup>
+    </CommandsTemplate>
+    <FilterTemplate Context="filterContext">
+        <HxInputText Label="Jméno" @bind-Value="filterContext.Name" />
+    </FilterTemplate>
+    <DataTemplate>
+        <HxGrid @ref="gridComponent"
+                ContentNavigationMode="GridContentNavigationMode.Pagination"
+                PageSize="1000"
+                MultiSelectionEnabled="true"
+                TableContainerCssClass="scrollable-table-container"
+                HeaderRowCssClass="sticky-top"
+                FooterRowCssClass="sticky-bottom"
+                TItem="Donor"
+                DataProvider="GetGridData"
+                @bind-SelectedDataItem="currentDonor"
+                @bind-SelectedDataItem:after="HandleSelectedDataItemChanged"
+                Responsive="true"
+                PreserveSelection="false">
+            <Columns>
+                
+                <HxGridColumn HeaderText="Jméno"
+                              ItemTextSelector="@(d => d.Name)"
+                              SortKeySelector="d => d.Name"/>
+                <HxGridColumn HeaderText="IBAN"
+                              ItemTextSelector="@(d => d.IBAN)"
+                              SortKeySelector="d => d.IBAN"/>
+                <HxGridColumn HeaderText="Variabilní symbol"
+                              ItemTextSelector="@(d => d.VariableSymbol)"
+                              SortKeySelector="d => d.VariableSymbol"/>
+                <HxGridColumn HeaderText="E-mail"
+                              ItemTextSelector="@(d => d.Email)"
+                              SortKeySelector="d => d.Email"/>
+                <HxGridColumn HeaderText="Datum narození"
+                              ItemTextSelector="@(d => d.Birthdate?.ToString("d"))"
+                              ItemCssClass="text-end"
+                              HeaderCssClass="text-end"
+                              SortKeySelector="d => d.Birthdate"
+                              IsDefaultSortColumn="true"/>
+                
+                <HxContextMenuGridColumn Context="currentDonor">
+                    <HxContextMenu>
+                        <HxContextMenuItem Text="Editovat"
+                                           Icon="BootstrapIcon.Pen"
+                                           OnClick="async () => await HandleEditClick(currentDonor)" />
+
+                        <HxContextMenuItem Text="Delete"
+                                           Icon="BootstrapIcon.Trash"
+                                           OnClick="async () => await HandleDeleteClick(currentDonor)"
+                                           ConfirmationQuestion="@($"Opravdu chcete smazat označeného dárce? ({currentDonor.Id})")"/>
+
+                    </HxContextMenu>
+                </HxContextMenuGridColumn>
+            </Columns>
+        </HxGrid>
+    </DataTemplate>
+ 
+</HxListLayout>
+
+<HxOffcanvas @ref="importCsvOffCanvasComponent" Title="Import Xls" Backdrop="OffcanvasBackdrop.Static">
+    <BodyTemplate>
+        <h5>Specifikace Xls souboru:</h5>
+        První řádek obsahuje názvy sloupců
+        
+        <h6>Sloupce</h6>
+        <ul>
+            <li>Jméno</li>
+            <li>Datum narození</li>
+            <li>E-mail</li>
+            <li>Výchozí IBAN</li>
+            <li>Výchozí VS</li>
+        </ul>
+    </BodyTemplate>
+    <FooterTemplate>
+        <HxButton Text="Importovat"
+                  Color="ThemeColor.Primary"
+                  Icon="BootstrapIcon.FiletypeXlsx"
+                  OnClick="HandleImportCsv" />
+    </FooterTemplate>
+</HxOffcanvas>

@@ -38,14 +38,19 @@ public class ElectronHelper
         };
 
         //Electron.NativeTheme.SetThemeSource(ThemeSourceMode.System);
-        Electron.Menu.SetApplicationMenu(menu);
+        Electron.Menu.SetApplicationMenu([]);
     }
 
     public static async Task CreateElectronWindowAsync()
     {
         var window = await Electron.WindowManager.CreateWindowAsync(new BrowserWindowOptions()
         {
-            
+            WebPreferences = new WebPreferences()
+            {
+                NodeIntegration = false
+            },
+            TitleBarStyle = TitleBarStyle.customButtonsOnHover,
+            //TitleBarOverlay = true,
         });
         
         /*

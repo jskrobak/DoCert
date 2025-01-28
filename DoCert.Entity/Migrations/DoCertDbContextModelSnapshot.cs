@@ -17,19 +17,99 @@ namespace DoCert.Entity.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.11");
 
-            modelBuilder.Entity("DoCert.Model.BankAccount", b =>
+            modelBuilder.Entity("DoCert.Model.Agenda", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AccountNumber")
+                    b.Property<string>("Address")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BodyTemplate")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FooterText")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IssuerName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IssuerPosition")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("LogoPng")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<int>("MailAccountId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MailBody")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MailSubject")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Organization")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PlaceAndDateTemplate")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RegNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("StamperPng")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MailAccountId");
+
+                    b.ToTable("Agendas");
+                });
+
+            modelBuilder.Entity("DoCert.Model.Certificate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("DonorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastSentDate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("BankAccounts");
+                    b.ToTable("Certificates");
                 });
 
             modelBuilder.Entity("DoCert.Model.Donate", b =>
@@ -44,31 +124,22 @@ namespace DoCert.Entity.Migrations
                     b.Property<int>("BankAccountId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ConstantSymbol")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("DonorId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Message")
-                        .IsRequired()
+                    b.Property<string>("Iban")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SpecificSymbol")
-                        .IsRequired()
+                    b.Property<string>("Message")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("VariableSymbol")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BankAccountId");
 
                     b.HasIndex("DonorId");
 
@@ -84,70 +155,72 @@ namespace DoCert.Entity.Migrations
                     b.Property<DateTime?>("Birthdate")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("CertificateId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IBAN")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("VariableSymbol")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CertificateId")
+                        .IsUnique();
 
                     b.ToTable("Donors");
                 });
 
-            modelBuilder.Entity("DoCert.Model.ImportProfile", b =>
+            modelBuilder.Entity("DoCert.Model.MailAccount", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AccountNumberColumnIndex")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("AmountColumnIndex")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("ConstantSymbolColumnIndex")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("CultureInfo")
+                    b.Property<string>("Bcc")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("DateColumnIndex")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Delimiter")
+                    b.Property<string>("Host")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("DonorNameColumnIndex")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Encoding")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("HasHeaderRecord")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("MessageColumnIndex")
+                    b.Property<bool>("IsTest")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("SpecificSymbolColumnIndex")
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Port")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("VariableSymbolColumnIndex")
+                    b.Property<string>("SenderEmail")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("UseSsl")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ImportProfiles");
+                    b.ToTable("MailAccounts");
                 });
 
             modelBuilder.Entity("Havit.Data.EntityFrameworkCore.Model.DataSeedVersion", b =>
@@ -165,23 +238,41 @@ namespace DoCert.Entity.Migrations
                     b.ToTable("__DataSeed", (string)null);
                 });
 
-            modelBuilder.Entity("DoCert.Model.Donate", b =>
+            modelBuilder.Entity("DoCert.Model.Agenda", b =>
                 {
-                    b.HasOne("DoCert.Model.BankAccount", "BankAccount")
+                    b.HasOne("DoCert.Model.MailAccount", "MailAccount")
                         .WithMany()
-                        .HasForeignKey("BankAccountId")
+                        .HasForeignKey("MailAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("MailAccount");
+                });
+
+            modelBuilder.Entity("DoCert.Model.Donate", b =>
+                {
                     b.HasOne("DoCert.Model.Donor", "Donor")
                         .WithMany()
                         .HasForeignKey("DonorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BankAccount");
-
                     b.Navigation("Donor");
+                });
+
+            modelBuilder.Entity("DoCert.Model.Donor", b =>
+                {
+                    b.HasOne("DoCert.Model.Certificate", "Certificate")
+                        .WithOne("Donor")
+                        .HasForeignKey("DoCert.Model.Donor", "CertificateId");
+
+                    b.Navigation("Certificate");
+                });
+
+            modelBuilder.Entity("DoCert.Model.Certificate", b =>
+                {
+                    b.Navigation("Donor")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

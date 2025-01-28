@@ -1,0 +1,184 @@
+﻿@page "/Certificates"
+@using DoCert.Model
+@using DoCert.Services
+
+@inject IDataService DataService;
+
+<style>
+	.scrollable-table-container {
+		overflow: auto;
+		height: calc(100vh - 160px);
+	}
+	.contextDropdownToggleButton::after {
+
+		content: none;
+	}
+	.donorNameColumn {
+		width: 500px;
+	}
+</style>
+
+<PageTitle>Potvrzení</PageTitle>
+
+<HxModal @ref="certificateEditModal" ShowCloseButton="true">
+	<HeaderTemplate>
+		Editace potvrzení
+	</HeaderTemplate>
+	<BodyTemplate>
+		<Content>
+
+			<EditForm Model="@currentCertificate" OnSubmit="@(async () => { await UpdateCertificate(); })">
+				<DataAnnotationsValidator />
+
+				<HxInputNumber Label="Částka" @bind-Value="@currentCertificate.Amount" />
+				<HxInputDate Label="Datum narození"  @bind-Value="@currentCertificate.LastSentDate" />
+
+				<HxSubmit Color="ThemeColor.Primary">Uložit</HxSubmit>
+
+			</EditForm>
+		</Content>
+	</BodyTemplate>
+</HxModal>
+
+<HxModal @ref="selectDonorModal" ShowCloseButton="true">
+	<HeaderTemplate>
+		Vyberte dárce
+	</HeaderTemplate>
+	<BodyTemplate>
+		<Content>
+
+			<EditForm Model="@currentCertificate" OnSubmit="@(async () => { await InsertCertificate(); })">
+				<DataAnnotationsValidator />
+
+				<HxSelect TItem="Donor"
+				          TValue="int?"
+				          Label="Jméno"
+				          @bind-Value="@selectedDonorId"
+				          Data="availableDonors"
+				          TextSelector="@(d => d.Name)"
+				          ValueSelector="@(d => d.Id)"
+				          Nullable="true"
+				          NullText="-vyberte dárce-"
+				          NullDataText="Nahrávám dárce..."
+				          InputGroupStartText="Dárci"/>
+
+
+				<HxSubmit Color="ThemeColor.Primary">Použít</HxSubmit>
+
+			</EditForm>
+		</Content>
+	</BodyTemplate>
+</HxModal>
+
+<HxModal @ref="progressModal" ShowCloseButton="false" CloseOnEscape="false" Backdrop="ModalBackdrop.Static">
+	<HeaderTemplate>
+		Odesílám e-maily...
+	</HeaderTemplate>
+	<BodyTemplate>
+		<HxProgress MinValue="0" MaxValue="1">
+			<HxProgressBar Value="@progressValue"/>
+		</HxProgress>
+	</BodyTemplate>
+</HxModal>
+
+
+<HxModal @ref="errorModal" ShowCloseButton="true">
+	<HeaderTemplate>
+		Chyby
+	</HeaderTemplate>
+	<BodyTemplate>
+		<HxRepeater Data="errors">
+			<ItemTemplate Context="item">
+				<p>@item</p>
+			</ItemTemplate>
+			<NullTemplate>
+				Loading...
+			</NullTemplate>
+		</HxRepeater>
+	</BodyTemplate>
+</HxModal>
+
+<HxListLayout Title="Potvrzení" TFilterModel="CertificateFilter"
+              @bind-FilterModel="filterModel"
+              @bind-FilterModel:after="gridComponent.RefreshDataAsync">
+	<CommandsTemplate>
+		<HxButton Text="Importovat"
+		          Color="ThemeColor.Primary"
+		          Icon="BootstrapIcon.BoxArrowInDownLeft" OnClick="HandleImportClick" />
+
+		<HxDropdownButtonGroup>
+			<HxDropdownToggleButton CssClass="contextDropdownToggleButton" Color="ThemeColor.Secondary" Icon="BootstrapIcon.ThreeDots">
+			</HxDropdownToggleButton>
+			<HxDropdownMenu>
+				<HxDropdownItem Icon="BootstrapIcon.Plus"
+				                OnClick="HandleNewCertClicked">Nové potvrzení</HxDropdownItem>
+				<HxDropdownItem Icon="BootstrapIcon.Trash"
+				                OnClick="HandleDeleteSelected">Smazat označené</HxDropdownItem>
+				<HxDropdownItem @ref="btnEmailSelected" Icon="BootstrapIcon.EnvelopeAt"
+				                OnClick="HandleEmailSelectedClicked">Odeslat označené</HxDropdownItem>
+				<HxDropdownItem Icon="BootstrapIcon.FilePdf"
+				                OnClick="HandlePdfSelectedClicked">Exportovat označené do pdf</HxDropdownItem>
+			</HxDropdownMenu>
+		</HxDropdownButtonGroup>
+	</CommandsTemplate>
+	<FilterTemplate Context="filterContext">
+		<HxInputText Label="Dárce" @bind-Value="filterContext.DonorName" />
+		<HxMultiSelect TItem="int" TValue="int" Data="new []{2024, 2025}" Label="Rok" @bind-Value="filterContext.Years"></HxMultiSelect>
+	</FilterTemplate>
+	<DataTemplate>
+
+		<HxGrid @ref="gridComponent"
+		        ContentNavigationMode="GridContentNavigationMode.Pagination"
+		        PageSize="1000"
+		        TableContainerCssClass="scrollable-table-container"
+		        HeaderRowCssClass="sticky-top"
+		        FooterRowCssClass="sticky-bottom"
+		        TItem="Certificate"
+		        DataProvider="GetGridData"
+		        @bind-SelectedDataItem="currentCertificate"
+		        @bind-SelectedDataItem:after="HandleSelectedDataItemChanged"
+		        Responsive="true"
+		        MultiSelectionEnabled="true"
+		        @bind-SelectedDataItems="selectedCertificates"
+		        PreserveSelection="false">
+			<Columns>
+				<HxGridColumn HeaderText="Dárce"
+				              ItemTextSelector="@(cert => cert.Donor.Name)"
+				              SortKeySelector="d => d.Donor.Name"/>
+				<HxGridColumn HeaderText="Datum narození"
+				              ItemTextSelector="@(cert => cert.Donor.Birthdate !=null ? cert.Donor.Birthdate.Value.ToString("d"): "")"
+				              ItemCssClass="text-end"
+				              HeaderCssClass="text-end"
+				              SortKeySelector="d => d.Donor.Birthdate ?? DateTime.MinValue"/>
+				<HxGridColumn HeaderText="E-mail"
+				              ItemTextSelector="@(cert => cert.Donor.Email)"
+				              SortKeySelector="d => d.Donor.Email"/>
+				<HxGridColumn HeaderText="Částka"
+				              ItemTextSelector="@(cert => cert.Amount.ToString("c0"))"
+				              ItemCssClass="text-end"
+				              HeaderCssClass="text-end"
+				              SortKeySelector="d => d.Amount"/>
+				<HxGridColumn HeaderText="Odesláno"
+				              ItemTextSelector="@(cert => cert.LastSentDate != null ? cert.LastSentDate.Value.ToString("g") : "")"
+				              ItemCssClass="text-end"
+				              HeaderCssClass="text-end"
+				              SortKeySelector="d => d.LastSentDate ?? DateTime.MinValue"/>
+
+				<HxContextMenuGridColumn Context="currentCertificate">
+					<HxContextMenu>
+						<HxContextMenuItem Text="Editovat"
+						                   Icon="BootstrapIcon.Pen"
+						                   OnClick="async () => await HandleEditClick(currentCertificate)" />
+						<HxContextMenuItem Text="Delete"
+						                   Icon="BootstrapIcon.Trash"
+						                   OnClick="async () => await HandleDeleteClick(currentCertificate)"
+						                   ConfirmationQuestion="@($"Opravdu chcete smazat označené potvrzení? ({currentCertificate.Amount}, {currentCertificate.Donor.Name})")"/>
+						<HxContextMenuItem Text="Uložit Pdf"
+						                   Icon="BootstrapIcon.Trash"
+						                   OnClick="async () => await HandleSavePdfClick(currentCertificate)"/>
+					</HxContextMenu>
+				</HxContextMenuGridColumn>
+			</Columns>
+		</HxGrid>
+	</DataTemplate>
+</HxListLayout>

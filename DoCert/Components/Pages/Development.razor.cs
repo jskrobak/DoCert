@@ -2,9 +2,6 @@
 using ElectronNET.API;
 using ElectronNET.API.Entities;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using SoloX.BlazorJsBlob.Services.Impl;
-
 
 namespace DoCert.Components.Pages;
 
@@ -12,6 +9,8 @@ public partial class Development : ComponentBase
 {
     private async Task HandleFakeCsvDonatesClick()
     {
+        /*
+        
         var donates = FakeDataService.PrepareFakeDonates();
         using var stream = new MemoryStream();
         await using var tw = new StreamWriter(stream, Encoding.GetEncoding(1250));
@@ -66,15 +65,18 @@ public partial class Development : ComponentBase
             return;
         }
 
-        await using var blob = await BlobService
-            .CreateBlobAsync(stream, "plain/text");
+        //await using var blob = await BlobService
+        //    .CreateBlobAsync(stream, "plain/text");
         
-        await BlobService.SaveAsFileAsync(blob, "donates.csv");
+        //await BlobService.SaveAsFileAsync(blob, "donates.csv");
+        */
     }
 
     private async Task HandleSeedData()
     {
+        /*
         var donates = FakeDataService.PrepareFakeDonates();
         await DataService.InsertDonatesAsync(donates);
+        */
     }
 }
