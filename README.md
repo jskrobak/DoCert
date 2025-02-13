@@ -2,7 +2,7 @@
 Docert (DOnation CERTificate manager) je aplikace pro správu potvrzení o darech.
 
 ## Stažení a instalace
-Verze pro Windows x64 ke stažeí zde: <a href="https://www.skrobak.net/download/docert.zip">docert.zip</a>
+Verze pro Windows x64 ke stažení zde: <a href="https://www.skrobak.net/download/docert.zip">docert.zip</a>
 
 ### Instalace
 Adresář docert ze souboru docert.zip rozbalte kamkoliv na disk a spusťte docert.exe.
@@ -36,7 +36,7 @@ Potvrzení můžete uložit od pdf nebo odeslat emailem a to jak po jednom, tak 
 ## Kam se ukládají data?
 Data o darech jsou citlivá a proto je aplikace navržena tak, aby data neopustila počítač uživatele. Aplikace pracuje s databázovým souborem, který je uložen v profilu uživatele mimo adresář aplikace.
 
-c:\Users\[uživatel]\AppData\Roaming\DoCert\docert.sb
+c:\Users\[uživatel]\AppData\Roaming\DoCert\docert.db
 
 Při prvním spuštění se vytvoří nový databázový soubor docert.db (pokud již v profilu uživatele neexistuje z předchozího použití aplikace). Se souborem se dá manipulovat při vypnuté aplikaci, např. zálohovat, přesouvat na jiný počítač apod.
 
